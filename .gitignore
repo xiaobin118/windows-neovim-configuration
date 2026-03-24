@@ -1,0 +1,21 @@
+# Neovim
+.nvimlog
+*.log
+*.tmp
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+
+# Plugin/build artifacts (adjust to your setup)
+lazyvim.json
+
+# If you use Mason:
+mason/
+
+# If you use Neovim's local state in this folder (some setups do)
+state/
+shada/
+swap/
+undo/
+backup/
