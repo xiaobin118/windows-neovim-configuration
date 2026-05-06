@@ -6,12 +6,12 @@ return {
         opts = {
             -- Image configuration for Neovide
             image = {
-                enabled = false,  -- 1. Enable it (was false)
+                enabled = false,   -- 1. Enable it (was false)
                 doc = {
                     inline = true, -- Show images in hover docs
                     float = true,  -- Show images in floating windows
                 },
-                -- 2. REMOVED the complex 'terminal' function. 
+                -- 2. REMOVED the complex 'terminal' function.
                 -- Snacks auto-detects Neovide when that function is missing.
             },
 

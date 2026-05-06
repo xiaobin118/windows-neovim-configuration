@@ -88,33 +88,95 @@ vim.cmd("filetype indent on")
 -- =========================
 -- Code Runner
 -- =========================
+-- local mappings = {
+-- cpp = ':w<CR>:terminal cmd.exe /C "g++ % -o %:r.exe && %:r.exe"<CR>',
+-- c = ':w<CR>:terminal cmd.exe /C "gcc % -o %:r.exe && %:r.exe"<CR>',
+-- -- rust = ':w<CR>:terminal cmd.exe /C "rustc % -o %:r.exe && %:r.exe"<CR>',
+-- python = ':w<CR>:terminal cmd.exe /C "python % & pause"<CR>',
+-- java = ':w<CR>:terminal cmd.exe /C "javac % && java %:r & pause"<CR>',
+-- sh = ':w<CR>:terminal cmd.exe /C "bash % & pause"<CR>',
+-- javascript = ':w<CR>:terminal cmd.exe /C "node % & pause"<CR>',
+-- lua = ':w<CR>:terminal cmd.exe /C "lua % & pause"<CR>',
+-- html = ':w<CR>:terminal cmd.exe /C "cd %:p:h && live-server --open=%:t"<CR>',
+-- tex = ':w<CR>:terminal cmd.exe /C "latexmk -xelatex -pvc -interaction=nonstopmode "%""<CR>',
+-- R = ':w<CR>:terminal cmd.exe /C "Rscript % & pause"<CR>',
+-- ps1 =
+-- ':w<CR>:terminal powershell.exe /C "powershell -ExecutionPolicy Bypass -File %; Read-Host -Prompt \\"Press Enter to continue\\"" <CR>',
+-- -- rust first cd the current buffer's parent directory
+-- -- then compile and run
+-- rust = ':w<CR>:terminal cmd.exe /C "cd %:p:h && rustc % -o %:t:r.exe && %:t:r.exe & pause"<CR>',
+-- -- use deno for ts
+-- typescript = ':w<CR>:terminal cmd.exe /C "deno run % & pause"<CR>',
+-- }
+
+-- for ft, cmd_str in pairs(mappings) do
+-- vim.api.nvim_create_autocmd("FileType", {
+-- pattern = ft,
+-- callback = function(args)
+-- -- This creates the `:Run` command only for the current buffer
+-- vim.api.nvim_buf_create_user_command(args.buf, "Run", function()
+-- vim.cmd(cmd_str)
+-- end, { desc = "Compile and run current file" })
+-- end,
+-- })
+-- end
+-- Helper function to safely build the terminal command
+
+local function term_cmd(cmd_template)
+    return function()
+        -- Save file first
+        vim.cmd("write")
+
+        -- Expand the path variables safely
+        local file = vim.fn.expand("%:p")               -- Full path
+        local file_no_ext = vim.fn.expand("%:p:r")      -- Full path without extension
+        local file_name = vim.fn.expand("%:t")          -- Just filename (e.g., main.c)
+        local file_name_no_ext = vim.fn.expand("%:t:r") -- Just filename without ext (e.g., main)
+        local dir = vim.fn.expand("%:p:h")              -- Directory of the file
+
+        -- Replace placeholders in your template
+        local final_cmd = cmd_template
+            :gsub("%%:p:h", dir)
+            :gsub("%%:p:r", file_no_ext)
+            :gsub("%%:t:r", file_name_no_ext)
+            :gsub("%%:t", file_name)
+            :gsub("%%:r", file_no_ext)
+            :gsub("%%", file)
+
+        -- Open a terminal at the bottom and run the command
+        vim.cmd("botright 15split")
+        vim.cmd("terminal " .. final_cmd)
+        vim.cmd("startinsert") -- Auto-enter terminal mode
+    end
+end
+
+-- Your fixed mappings (using properly quoted paths to prevent space-in-path errors)
 local mappings = {
-    cpp = ':w<CR>:terminal cmd.exe /C "g++ % -o %:r.exe && %:r.exe"<CR>',
-    c = ':w<CR>:terminal cmd.exe /C "gcc % -o %:r.exe && %:r.exe"<CR>',
-    -- rust = ':w<CR>:terminal cmd.exe /C "rustc % -o %:r.exe && %:r.exe"<CR>',
-    python = ':w<CR>:terminal cmd.exe /C "python % & pause"<CR>',
-    java = ':w<CR>:terminal cmd.exe /C "javac % && java %:r & pause"<CR>',
-    sh = ':w<CR>:terminal cmd.exe /C "bash % & pause"<CR>',
-    javascript = ':w<CR>:terminal cmd.exe /C "node % & pause"<CR>',
-    lua = ':w<CR>:terminal cmd.exe /C "lua % & pause"<CR>',
-    html = ':w<CR>:terminal cmd.exe /C "cd %:p:h && live-server --open=%:t"<CR>',
-    tex = ':w<CR>:terminal cmd.exe /C "latexmk -xelatex -pvc -interaction=nonstopmode "%""<CR>',
-    R = ':w<CR>:terminal cmd.exe /C "Rscript % & pause"<CR>',
-    ps1 =
-    ':w<CR>:terminal powershell.exe /C "powershell -ExecutionPolicy Bypass -File %; Read-Host -Prompt \\"Press Enter to continue\\"" <CR>',
-    -- rust first cd the current buffer's parent directory
-    -- then compile and run
-    rust = ':w<CR>:terminal cmd.exe /C "cd %:p:h && rustc % -o %:t:r.exe && %:t:r.exe & pause"<CR>',
-    -- use deno for ts
-    typescript = ':w<CR>:terminal cmd.exe /C "deno run % & pause"<CR>',
+    c = 'cmd.exe /C "chcp 65001 > nul && g++ -fexec-charset=UTF-8 "%" -g -o "%:r.exe" && "%:r.exe" & pause"',
+    cpp = 'cmd.exe /C "chcp 65001 > nul && g++ -fexec-charset=UTF-8 "%" -g -o "%:r.exe" && "%:r.exe" & pause"',
+    python = 'cmd.exe /C "python "%" & pause"',
+    -- Java needs to CD into the directory first to run the class name properly
+    java = 'cmd.exe /C "cd /d "%:p:h" && javac "%:t" && java "%:t:r" & pause"',
+    sh = 'cmd.exe /C "bash "%" & pause"',
+    javascript = 'cmd.exe /C "node "%" & pause"',
+    lua = 'cmd.exe /C "lua "%" & pause"',
+    html = 'cmd.exe /C "cd /d "%:p:h" && live-server --open="%:t""',
+    tex = 'cmd.exe /C "cd /d "%:p:h" && latexmk -xelatex -pvc -interaction=nonstopmode "%:t""',
+    r = 'cmd.exe /C "Rscript "%" & pause"', -- Filetype is lowercase 'r' in Neovim usually
+    -- PowerShell uses -Command, not /C
+    ps1 = 'powershell.exe -ExecutionPolicy Bypass -Command "& \'%\' ; Read-Host -Prompt \\"Press Enter to continue\\""',
+    rust = 'cmd.exe /C "cd /d "%:p:h" && rustc "%:t" -o "%:t:r.exe" && "%:t:r.exe" & pause"',
+    typescript = 'cmd.exe /C "deno run "%" & pause"',
 }
 
-
-for ft, rhs in pairs(mappings) do
+-- Apply the mappings as a buffer-local <F5> keybind for each filetype
+for ft, cmd_str in pairs(mappings) do
     vim.api.nvim_create_autocmd("FileType", {
         pattern = ft,
-        callback = function()
-            vim.keymap.set("c", "run", rhs, { buffer = true, noremap = true, silent = false })
+        callback = function(args)
+            -- Map <F5> (or whatever key you want) to run the terminal command
+            vim.keymap.set("c", "run", term_cmd(cmd_str), { buffer = args.buf, desc = "Run in Terminal" })
+            vim.keymap.set("n", "<F6>", term_cmd(cmd_str), { buffer = args.buf, desc = "Run in Terminal" })
         end,
     })
 end

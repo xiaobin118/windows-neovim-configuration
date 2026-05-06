@@ -1,13 +1,8 @@
 return {
-    -- Themes
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
-        config = function()
-            vim.cmd.colorscheme("catppuccin")
-        end,
-    },
+
+    -- 设置默认 colorscheme（在 themery 加载后）
+    -- 如果你希望启动时自动应用上次保存的主题，themery 会自动处理
+    -- 否则可以这样设置默认主题：
     { "nvim-tree/nvim-web-devicons", lazy = true },
 
     -- Tailwind Tools (RESTORED)
@@ -24,6 +19,18 @@ return {
     -- ft = { "css" },
     -- event = "BufReadPre",
     -- },
+    {
+        "utilyre/barbecue.nvim",
+        name = "barbecue",
+        version = "*",
+        dependencies = {
+            "SmiteshP/nvim-navic",
+            "nvim-tree/nvim-web-devicons", -- optional dependency
+        },
+        opts = {
+            -- configurations go here
+        }
+    },
 
     -- Statusline
     {
@@ -71,7 +78,9 @@ return {
         event = "VeryLazy",
         dependencies = { "nvim-web-devicons" },
         init = function()
-            vim.g.barbar_auto_setup = false
+            vim.g.barbar_auto_setup = true
+            vim.keymap.set("n", "<S-l>", "<Cmd>BufferNext<CR>", { silent = true, noremap = true })
+            vim.keymap.set("n", "<S-h>", "<Cmd>BufferPrevious<CR>", { silent = true, noremap = true })
         end,
     },
 
@@ -167,4 +176,5 @@ return {
 
     -- Showkeys
     { "nvzone/showkeys", event = "VeryLazy", config = function() require("showkeys").setup({ position = "top-right" }) end },
+
 }

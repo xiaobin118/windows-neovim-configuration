@@ -6,7 +6,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
         -- Only run if the buffer is associated with a file (skip empty/unnamed buffers)
         local buf_path = vim.fn.expand("%:p:h") -- Get directory of current buffer file
         if buf_path ~= "" and vim.fn.isdirectory(buf_path) == 1 then
-            vim.cmd("cd " .. buf_path) -- Change working directory
+            vim.cmd("cd " .. buf_path)          -- Change working directory
             -- Optional: Print confirmation (remove if you don't want it)
             -- print("Working directory changed to: " .. buf_path)
         end
@@ -26,7 +26,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out, "WarningMsg" },
+            { out,                            "WarningMsg" },
             { "\nPress any key to exit..." },
         }, true, {})
         vim.fn.getchar()

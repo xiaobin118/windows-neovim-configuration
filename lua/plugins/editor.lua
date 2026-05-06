@@ -287,5 +287,75 @@ return {
             -- suggested keymap
             { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
         },
-    }
+    },
+
+    {
+        'samodostal/image.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim'
+        },
+        config = function()
+            require('image').setup {
+                render = {
+                    min_padding = 5,
+                    show_label = true,
+                    show_image_dimensions = true,
+                    use_dither = true,
+                    foreground_color = false,
+                    background_color = false
+                },
+                events = {
+                    update_on_nvim_resize = true,
+                },
+            }
+        end,
+    },
+
+    -- {
+    -- 'adelarsq/image_preview.nvim',
+    -- event = 'VeryLazy',
+    -- config = function()
+    -- -- if terminal == "wezterm" then
+    -- require('image_preview').setup {
+    -- backend = 'ueberzug',
+    -- -- backend = 'w3m',
+    -- -- backend = 'kitty
+    -- }
+    -- end
+    -- },
+
+    -- {
+    -- 'Vigemus/iron.nvim',
+    -- lazy = true,
+    -- config = function()
+    -- require('iron.core').setup {
+    -- config = {
+    -- -- Whether a repl should be discarded or not
+    -- scratch_repl = true,
+    -- -- Your repl definitions come here
+    -- -- Can be a table or a function that
+    -- -- returns a table (see below)
+    -- repl_definition = {
+    -- sh = {
+    -- command = { "powershell" }
+    -- },
+    -- python = {
+    -- command = { "ipython" }
+    -- },
+    -- lua = {
+    -- command = { "lua" }
+    -- },
+    -- rust = {
+    -- command = { "evcxr" }
+    -- },
+    -- },
+    -- },
+    -- -- If the highlight is on, you can change how it looks
+    -- -- For the available options, check nvim_set_hl
+    -- highlight = {
+    -- italic = true
+    -- },
+    -- }
+    -- end,
+    -- }
 }

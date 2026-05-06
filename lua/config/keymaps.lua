@@ -1,6 +1,6 @@
 -- Diagnostic navigation
-vim.api.nvim_set_keymap("n", "gj", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "gk", "<cmd>lua vim.diagnostic.goto_next()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>gj", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>gk", "<cmd>lua vim.diagnostic.goto_next()<CR>", { noremap = true, silent = true })
 
 -- Basic Mappings
 vim.keymap.set("i", "jj", "<Esc>", { noremap = true, silent = true })
@@ -26,7 +26,7 @@ vim.keymap.set("v", "<C-c>", '"+y', { noremap = true, silent = true })
 -- in visual mode, use <ctrl-a> to select all and copy
 -- first gg to go to the top, then VG to select all, then +y to copy to clipboard
 vim.keymap.set("n", "<C-a>", "ggVG+y", { noremap = true, silent = true })
-vim.keymap.set("v", "<F2>", ":g/^\\s*$/d<CR>", { noremap = true, silent = true }) -- Delete empty lines
+vim.keymap.set("v", "<F2>", ":g/^\\s*$/d<CR>", { noremap = true, silent = true })       -- Delete empty lines
 vim.keymap.set("n", "<C-F2>", ":vert diffsplit<CR>", { noremap = true, silent = true }) -- Diff split
 -- vim.keymap.set("n", "tt", ":%s/\\t/    /g<CR>", { noremap = true, silent = false }) -- Tabs to spaces
 

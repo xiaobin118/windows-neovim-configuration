@@ -27,11 +27,10 @@ return {
 
                     -- LaTeX
                     tex = { "latexindent" },
-                },
 
-                format_on_save = {
-                    timeout_ms = 1000,
-                    lsp_format = "fallback",
+                    -- C/C++
+                    c = { "clang-format" },
+                    cpp = { "clang-format" },
                 },
 
                 -- Configure formatters for 4-space indentation
@@ -72,6 +71,14 @@ return {
                             "--yaml", "defaultIndent: '    '"
                         },
                     },
+
+                    -- Configure clang-format for 4-space indentation
+                    ["clang-format"] = {
+                        prepend_args = {
+                            "--style", "{BasedOnStyle: Google, IndentWidth: 4}"
+                        },
+                    }
+
                 },
             })
 
@@ -80,6 +87,9 @@ return {
             vim.opt.shiftwidth = 4   -- Number of spaces to use for each step of (auto)indent
             vim.opt.expandtab = true -- Use spaces instead of tabs
             vim.opt.softtabstop = 4  -- Number of spaces that a <Tab> counts for while editing
+            vim.keymap.set("n", "<leader>2", function()
+                require("conform").format({ lsp_fallback = true })
+            end, { desc = "Format current buffer with conform" })
         end,
     },
 }

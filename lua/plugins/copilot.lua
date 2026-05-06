@@ -3,12 +3,12 @@ return {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         event = "InsertEnter",
-        dependencies = {
-            "copilotlsp-nvim/copilot-lsp",
-            init = function()
-                vim.g.copilot_nes_debounce = 500
-            end,
-        },
+        -- dependencies = {
+            -- "copilotlsp-nvim/copilot-lsp",
+            -- init = function()
+                -- vim.g.copilot_nes_debounce = 500
+            -- end,
+        -- },
         config = function()
             require("copilot").setup({
                 filetypes = {
@@ -29,14 +29,14 @@ return {
                 panel = {
                     enabled = false,
                 },
-                nes = {
-                    enabled = true,
-                    keymap = {
-                        accept_and_goto = "<leader>ne",
-                        accept = false,
-                        dismiss = "<Esc>",
-                    },
-                },
+                -- nes = {
+                    -- enabled = true,
+                    -- keymap = {
+                        -- accept_and_goto = "<leader>ne",
+                        -- accept = false,
+                        -- dismiss = "<Esc>",
+                    -- },
+                -- },
             })
         end,
     },
