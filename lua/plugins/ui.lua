@@ -148,32 +148,67 @@ return {
     },
 
     -- Indent Guides
+    -- Indent Guides
     {
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
         opts = {},
         config = function()
             local highlight = {
-                "BlueLight", "Blue", "Cobalt", "Indigo", "Violet", "Purple", "DeepPurple",
+                "BlueLight", "Blue", "Cobalt", "Indigo", "Violet", "Purple", "DeepPurple","Coral"
             }
+
             local hooks = require("ibl.hooks")
+
+            -- 注册高亮设置，使用指定的颜色
             hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-                vim.api.nvim_set_hl(0, "BlueLight", { fg = "#8AB4F8" })
-                vim.api.nvim_set_hl(0, "Blue", { fg = "#61AFEF" })
-                vim.api.nvim_set_hl(0, "Cobalt", { fg = "#5C6BC0" })
-                vim.api.nvim_set_hl(0, "Indigo", { fg = "#7986CB" })
-                vim.api.nvim_set_hl(0, "Violet", { fg = "#9C27B0" })
-                vim.api.nvim_set_hl(0, "Purple", { fg = "#BA68C0" })
-                vim.api.nvim_set_hl(0, "DeepPurple", { fg = "#AB47B0" })
+                vim.api.nvim_set_hl(0, "BlueLight", { fg = "#8AB4F8", nocombine = true })  -- 浅蓝
+                vim.api.nvim_set_hl(0, "Blue", { fg = "#61AFEF", nocombine = true })        -- 亮蓝
+                vim.api.nvim_set_hl(0, "Cobalt", { fg = "#5C6BC0", nocombine = true })      -- 靛蓝
+                vim.api.nvim_set_hl(0, "Indigo", { fg = "#9575CD", nocombine = true })      -- 浅紫
+                vim.api.nvim_set_hl(0, "Violet", { fg = "#BA68C8", nocombine = true })      -- 紫罗兰
+                vim.api.nvim_set_hl(0, "Purple", { fg = "#CE93D8", nocombine = true })      -- 淡紫（已替换）
+                vim.api.nvim_set_hl(0, "DeepPurple", { fg = "#F06292", nocombine = true })  -- 粉红（已替换）
+                vim.api.nvim_set_hl(0, "Coral", { fg = "#FF8A65", nocombine = true })      -- 珊瑚橙
+                -- 然后在 highlight 列表中添加 "Coral"
             end)
+
+            -- 配置 indent-blankline
             require("ibl").setup({
                 indent = {
-                    highlight = highlight
+                    highlight = highlight,  -- 使用高亮组名称列表
+                    char = "│",             -- 缩进线字符
+                    priority = 2,
+                },
+
+                -- 作用域高亮
+                scope = {
+                    enabled = true,
+                    show_start = true,
+                    show_end = true,
+                    highlight = { "BlueLight" },  -- 作用域使用第一个颜色
+                    priority = 500,
+                },
+
+                -- 排除的文件类型
+                exclude = {
+                    filetypes = {
+                        "help",
+                        "startify",
+                        "dashboard",
+                        "lazy",
+                        "mason",
+                        "Neogit",
+                        "NvimTree",
+                        "TelescopePrompt",
+                        "alpha",
+                        "toggleterm",
+                    },
+                    buftypes = { "terminal", "nofile" },
                 },
             })
         end,
     },
-
     -- Showkeys
     { "nvzone/showkeys", event = "VeryLazy", config = function() require("showkeys").setup({ position = "top-right" }) end },
 

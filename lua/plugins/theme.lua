@@ -37,6 +37,17 @@ return {
         end,
     },
 
+    {
+        "fynnfluegge/monet.nvim",
+        name = "monet",
+        event = "VeryLazy",
+        config = function()
+            require("monet").setup({
+                -- 你的配置
+            })
+        end,
+    },
+
     -- 主题切换器
     {
         "zaldih/themery.nvim",
@@ -130,6 +141,10 @@ return {
                         vim.g.everforest_background = "soft"
                     ]],
                     },
+                    {
+                        name = "monet",
+                        colorscheme = "monet",
+                    }
                 },
 
                 -- 实时预览（默认 true）
