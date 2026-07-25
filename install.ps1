@@ -1,10 +1,10 @@
 # ============================================================
 # Neovim Configuration Installer — Windows (PowerShell)
-# Repo: https://github.com/xiaobin118/xiaobin118-s-neovim-configuration
+# Repo: https://github.com/xiaobin118/windows-neovim-configuration
 # ============================================================
 
 $ErrorActionPreference = "Stop"
-$RepoUrl = "https://github.com/xiaobin118/xiaobin118-s-neovim-configuration.git"
+$RepoUrl = "https://github.com/xiaobin118/windows-neovim-configuration.git"
 $NvimConfigDir = "$env:LOCALAPPDATA\nvim"
 $NvimDataDir = "$env:LOCALAPPDATA\nvim-data"
 $BackupDir = "$env:LOCALAPPDATA\nvim-backup-$(Get-Date -Format 'yyyyMMdd-HHmmss')"

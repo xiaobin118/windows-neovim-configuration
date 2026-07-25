@@ -19,26 +19,26 @@
 ### Windows (PowerShell)
 
 ```powershell
-Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/xiaobin118/xiaobin118-s-neovim-configuration/main/install.ps1").Content
+Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/xiaobin118/windows-neovim-configuration/main/install.ps1").Content
 ```
 
 或者手动下载运行：
 
 ```powershell
-git clone --depth 1 https://github.com/xiaobin118/xiaobin118-s-neovim-configuration.git $env:TEMP\nvim-config
+git clone --depth 1 https://github.com/xiaobin118/windows-neovim-configuration.git $env:TEMP\nvim-config
 & "$env:TEMP\nvim-config\install.ps1"
 ```
 
 ### Linux / macOS
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/xiaobin118/xiaobin118-s-neovim-configuration/main/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/xiaobin118/windows-neovim-configuration/main/install.sh)
 ```
 
 或者手动下载运行：
 
 ```bash
-git clone --depth 1 https://github.com/xiaobin118/xiaobin118-s-neovim-configuration.git /tmp/nvim-config
+git clone --depth 1 https://github.com/xiaobin118/windows-neovim-configuration.git /tmp/nvim-config
 bash /tmp/nvim-config/install.sh
 ```
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================
 # Neovim Configuration Installer — Linux / macOS
-# Repo: https://github.com/xiaobin118/xiaobin118-s-neovim-configuration
+# Repo: https://github.com/xiaobin118/windows-neovim-configuration
 # ============================================================
 
 set -euo pipefail
 
-REPO_URL="https://github.com/xiaobin118/xiaobin118-s-neovim-configuration.git"
+REPO_URL="https://github.com/xiaobin118/windows-neovim-configuration.git"
 NVIM_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 NVIM_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvim"
 NVIM_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/nvim"
