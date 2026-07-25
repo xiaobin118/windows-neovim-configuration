@@ -16,12 +16,32 @@ Write-Host ""
 
 # --- Prerequisite checks ---
 $errors = @()
+$warnings = @()
 
+# Required: Neovim (0.9+)
 if (-not (Get-Command "nvim" -ErrorAction SilentlyContinue)) {
     $errors += "Neovim not found. Install it via: winget install Neovim.Neovim"
 }
+else {
+    $nvimVersion = (nvim --version 2>$null | Select-Object -First 1) -replace '.*v?(\d+\.\d+).*', '$1'
+    if ([Version]$nvimVersion -lt [Version]"0.9") {
+        $errors += "Neovim $nvimVersion is too old. Version 0.9+ required. Update via: winget upgrade Neovim.Neovim"
+    }
+}
+
+# Required: Git
 if (-not (Get-Command "git" -ErrorAction SilentlyContinue)) {
     $errors += "Git not found. Install it via: winget install Git.Git"
+}
+
+# Optional: Node.js
+if (-not (Get-Command "node" -ErrorAction SilentlyContinue)) {
+    $warnings += "Node.js not found (optional — needed for some LSP servers). Install via: winget install OpenJS.NodeJS.LTS"
+}
+
+# Optional: Python 3
+if (-not (Get-Command "python3" -ErrorAction SilentlyContinue) -and -not (Get-Command "python" -ErrorAction SilentlyContinue)) {
+    $warnings += "Python 3 not found (optional — needed for some LSP servers). Install via: winget install Python.Python.3"
 }
 
 if ($errors.Count -gt 0) {
@@ -35,6 +55,22 @@ if ($errors.Count -gt 0) {
 
 Write-Host "[OK] Neovim: $(nvim --version | Select-Object -First 1)" -ForegroundColor Green
 Write-Host "[OK] Git: $(git --version)" -ForegroundColor Green
+
+if (Get-Command "node" -ErrorAction SilentlyContinue) {
+    Write-Host "[OK] Node.js: $(node --version)" -ForegroundColor Green
+}
+if (Get-Command "python3" -ErrorAction SilentlyContinue) {
+    Write-Host "[OK] Python: $(python3 --version)" -ForegroundColor Green
+}
+elseif (Get-Command "python" -ErrorAction SilentlyContinue) {
+    Write-Host "[OK] Python: $(python --version)" -ForegroundColor Green
+}
+
+if ($warnings.Count -gt 0) {
+    Write-Host ""
+    Write-Host "[WARNING] Optional dependencies missing:" -ForegroundColor Yellow
+    $warnings | ForEach-Object { Write-Host "  - $_" -ForegroundColor Yellow }
+}
 Write-Host ""
 
 # --- Back up existing config ---

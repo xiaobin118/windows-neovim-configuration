@@ -27,12 +27,31 @@ echo ""
 
 # --- Prerequisite checks ---
 errors=()
+warnings=()
 
+# Required: Neovim (0.9+)
 if ! command -v nvim &>/dev/null; then
     errors+=("Neovim not found. Install it via your package manager (brew/apt/dnf/pacman).")
+else
+    nvim_version=$(nvim --version 2>/dev/null | head -1 | grep -oP 'v?\K\d+\.\d+' | head -1)
+    if [ -n "$nvim_version" ] && [ "$(printf '%s\n' "0.9" "$nvim_version" | sort -V | head -1)" != "0.9" ]; then
+        errors+=("Neovim $nvim_version is too old. Version 0.9+ required. Please upgrade via your package manager.")
+    fi
 fi
+
+# Required: Git
 if ! command -v git &>/dev/null; then
     errors+=("Git not found. Install it via your package manager.")
+fi
+
+# Optional: Node.js
+if ! command -v node &>/dev/null; then
+    warnings+=("Node.js not found (optional — needed for some LSP servers). Install via your package manager.")
+fi
+
+# Optional: Python 3
+if ! command -v python3 &>/dev/null && ! command -v python &>/dev/null; then
+    warnings+=("Python 3 not found (optional — needed for some LSP servers). Install via your package manager.")
 fi
 
 if [ ${#errors[@]} -gt 0 ]; then
@@ -47,6 +66,17 @@ fi
 
 echo -e "${GREEN}[OK] Neovim: $(nvim --version | head -1)${NC}"
 echo -e "${GREEN}[OK] Git: $(git --version)${NC}"
+command -v node &>/dev/null && echo -e "${GREEN}[OK] Node.js: $(node --version)${NC}"
+command -v python3 &>/dev/null && echo -e "${GREEN}[OK] Python: $(python3 --version)${NC}"
+{ ! command -v python3 &>/dev/null && command -v python &>/dev/null; } && echo -e "${GREEN}[OK] Python: $(python --version)${NC}"
+
+if [ ${#warnings[@]} -gt 0 ]; then
+    echo ""
+    echo -e "${YELLOW}[WARNING] Optional dependencies missing:${NC}"
+    for warn in "${warnings[@]}"; do
+        echo -e "${YELLOW}  - $warn${NC}"
+    done
+fi
 echo ""
 
 # --- Back up existing config ---
