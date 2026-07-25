@@ -1,12 +1,18 @@
 -- Load
 -- Auto cd to current buffer's directory when switching buffers
+if vim.fn.has("win32") == 1 then
+    vim.g.plenary_curl_bin_path = "C:\\Windows\\System32\\curl.exe"
+    vim.g.copilot_curl = "C:\\Windows\\System32\\curl.exe"
+    vim.env.CURL = "C:\\Windows\\System32\\curl.exe"
+end
+
 vim.api.nvim_create_autocmd("BufEnter", {
     pattern = "*", -- Apply to all buffers
     callback = function()
         -- Only run if the buffer is associated with a file (skip empty/unnamed buffers)
         local buf_path = vim.fn.expand("%:p:h") -- Get directory of current buffer file
         if buf_path ~= "" and vim.fn.isdirectory(buf_path) == 1 then
-            vim.cmd("cd " .. buf_path)          -- Change working directory
+            vim.cmd.cd(vim.fn.fnameescape(buf_path)) -- Change working directory
             -- Optional: Print confirmation (remove if you don't want it)
             -- print("Working directory changed to: " .. buf_path)
         end
@@ -39,6 +45,9 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     spec = {
         { import = "plugins" }, -- Import all files in lua/plugins directory
+    },
+    rocks = {
+        enabled = false,
     },
     change_detection = {
         notify = false,

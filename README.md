@@ -1,15 +1,48 @@
 # Neovim 配置指南
 
-欢迎使用这份功能强大的 Neovim 配置！本配置是为 Windows 系统优化的现代化编辑器设置，整合了众多强大的插件和自定义快捷键。
+欢迎使用这份功能强大的 Neovim 配置！本配置支持 **Windows / Linux / macOS**，整合了众多强大的插件和自定义快捷键。
 
 ## 📋 目录
 
+- [一键安装](#一键安装)
 - [快速开始](#快速开始)
-- [系统要求](#系统要求)
-- [安装说明](#安装说明)
 - [快捷键映射](#快捷键映射)
 - [插件说明](#插件说明)
 - [常见问题](#常见问题)
+
+---
+
+## ⚡ 一键安装
+
+确保已安装 **Git** 和 **Neovim 0.9+**，然后在终端中执行对应命令：
+
+### Windows (PowerShell)
+
+```powershell
+Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/xiaobin118/xiaobin118-s-neovim-configuration/main/install.ps1").Content
+```
+
+或者手动下载运行：
+
+```powershell
+git clone --depth 1 https://github.com/xiaobin118/xiaobin118-s-neovim-configuration.git $env:TEMP\nvim-config
+& "$env:TEMP\nvim-config\install.ps1"
+```
+
+### Linux / macOS
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/xiaobin118/xiaobin118-s-neovim-configuration/main/install.sh)
+```
+
+或者手动下载运行：
+
+```bash
+git clone --depth 1 https://github.com/xiaobin118/xiaobin118-s-neovim-configuration.git /tmp/nvim-config
+bash /tmp/nvim-config/install.sh
+```
+
+脚本会自动备份现有配置，然后将本配置克隆到正确的位置。完成后运行 `nvim`，Lazy.nvim 会自动安装所有插件。
 
 ---
 
@@ -18,7 +51,7 @@
 ### 系统要求
 
 - **Neovim 0.9+** （推荐 0.11+）
-- **Windows 10/11** 或 WSL2
+- **Windows 10/11** / **Linux** / **macOS**
 - **Git** （用于克隆和管理插件）
 - **Node.js** （某些 LSP 服务器需要）
 - **Python 3** （某些语言服务器需要）
@@ -37,10 +70,14 @@
 
 ## 📦 安装说明
 
-### 1. 克隆配置文件
+### 1. 运行安装脚本
 
 ```bash
-git clone <your-repo-url> $env:APPDATA\nvim
+# Windows (PowerShell)
+.\install.ps1
+
+# Linux / macOS
+bash install.sh
 ```
 
 ### 2. 首次启动 Neovim
@@ -433,7 +470,7 @@ vim.cmd.colorscheme("catppuccin")
 
 ---
 
-**最后更新**: 2026-03-24
+**最后更新**: 2026-07-25
 
 **配置作者**: Xiaobin118
 
