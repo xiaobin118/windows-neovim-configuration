@@ -103,12 +103,14 @@ $optional = @(
     @{ name = "SumatraPDF"; cmd = "scoop install sumatrapdf | winget install SumatraPDF.SumatraPDF" },
     @{ name = "stylua";   cmd = "scoop install stylua" },
     @{ name = "prettier"; cmd = "npm i -g prettier" },
-    @{ name = "clang-format"; cmd = "scoop install llvm" },
+    @{ name = "clang-format"; check = "clang-format"; cmd = "scoop install llvm" },
     @{ name = "autopep8"; cmd = "pip install autopep8" },
-    @{ name = "beautysh"; cmd = "pip install beautysh" }
+    @{ name = "beautysh"; cmd = "pip install beautysh" },
+    @{ name = "im-select"; check = "im-select"; cmd = "scoop install im-select" }
 )
 foreach ($opt in $optional) {
-    $has = Test-Command ($opt.name.Split('-')[0])
+    $checkName = if ($opt.ContainsKey('check')) { $opt.check } else { $opt.name.Split('-')[0] }
+    $has = Test-Command $checkName
     $status = if ($has) { "[OK]" } else { "[--]" }
     $color = if ($has) { "Green" } else { "DarkGray" }
     Write-Host "$status $($opt.name): $($opt.cmd)" -ForegroundColor $color
