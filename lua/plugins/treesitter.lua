@@ -5,8 +5,21 @@ return {
         build = ":TSUpdate",
         event = "BufReadPre",
         config = function()
+            local util = require("config.util")
+            local candidates = {}
+            for _, root in ipairs({ os.getenv("SCOOP"), os.getenv("USERPROFILE") .. "/scoop" }) do
+                if root then
+                    table.insert(candidates, root .. "/apps/msys2/current/mingw64/bin")
+                end
+            end
+            local gcc = util.find_executable("gcc", candidates)
+
+            if gcc then
+                require("nvim-treesitter.install").compilers = { gcc }
+            end
+
             require("nvim-treesitter.configs").setup({
-                ensure_installed = { "c", "lua", "python", "javascript" },
+                ensure_installed = { "c", "lua", "python" },
                 auto_install = false,
                 highlight = { enable = true },
                 indent = { enable = true },
