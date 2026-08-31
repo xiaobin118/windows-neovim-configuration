@@ -12,7 +12,7 @@ return {
     -- 2. Mason (Installs binaries ONLY)
     {
         "williamboman/mason.nvim",
-        opts = { ensure_installed = { "tree-sitter-cli" } },
+        opts = { ensure_installed = { "tree-sitter-cli", "codelldb", "js-debug-adapter", "sharpdbg" } },
         config = function(_, opts) require("mason").setup(opts) end,
     },
     -- 3. Mason LSP Config (Disable ALL automation)
@@ -79,6 +79,25 @@ return {
                     Lua = {
                         diagnostics = { globals = { "vim", "require" } },
                     },
+                },
+            })
+
+            vim.lsp.config('clangd', {
+                capabilities = capabilities,
+                cmd = {
+                    "clangd",
+                    "--background-index",
+                    "--clang-tidy",
+                    "--completion-style=detailed",
+                    "--header-insertion=iwyu",
+                    "--pch-storage=memory",
+                    "--compile-commands-dir=build",
+                    -- make ir not show Structured binding declarations are a C++17 extension
+                    -- not use "--fallback"
+
+                    -- 可选：让 clangd 识别你的交叉编译/特定工具链编译器（很常见的坑）
+                    -- Linux/macOS 示例（按需改路径/模式）
+                    -- "--query-driver=/usr/bin/clang++,/usr/bin/g++,/opt/homebrew/opt/llvm/bin/clang++",
                 },
             })
 
