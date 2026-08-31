@@ -8,16 +8,20 @@ return {
             require("markview").setup()
         end,
     },
-    -- {
-    -- "iamcco/markdown-preview.nvim",
-    -- cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    -- ft = { "markdown" },
-    -- build = function() vim.fn["mkdp#util#install"]() end,
-    -- },
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function(plugin)
+            -- lazy 的函数式 build 不保证插件已在 runtimepath 中，直接 source 可避免 E117
+            vim.cmd("source " .. vim.fn.fnameescape(plugin.dir .. "/autoload/mkdp/util.vim"))
+            vim.fn["mkdp#util#install_sync"]()
+        end,
+    },
     -- { "vim-scripts/synmark.vim", event = "VeryLazy" },
 
     -- JS
-    { "pangloss/vim-javascript",     ft = "javascript" },
+    { "pangloss/vim-javascript", ft = "javascript" },
 
     -- SQL
     { "vim-scripts/SQLComplete.vim", ft = "sql" },
@@ -28,9 +32,20 @@ return {
         lazy = false,
         ft = { "tex", "latex" },
         init = function()
+            local util = require("config.util")
+            local candidates = {}
+            for _, dir in ipairs({ os.getenv("LOCALAPPDATA"), os.getenv("ProgramFiles") }) do
+                if dir then
+                    table.insert(candidates, dir .. "/SumatraPDF")
+                end
+            end
+            local viewer = util.find_executable("SumatraPDF.exe", candidates)
+
             vim.g.vimtex_view_method = "general"
-            vim.g.vimtex_view_sumatrapdf_exe = [[D:\SumatraPDF\SumatraPDF.exe]]
-            vim.g.vimtex_view_sumatrapdf_options = "-reuse-instance -forward-search @tex @line @pdf"
+            if viewer then
+                vim.g.vimtex_view_general_viewer = viewer
+                vim.g.vimtex_view_general_options = [[-reuse-instance -forward-search @tex @line @pdf]]
+            end
             vim.g.vimtex_compiler_method = "latexmk"
             vim.g.vimtex_compiler_latexmk = {
                 build_dir = "",
@@ -41,6 +56,7 @@ return {
 
     {
         "pmizio/typescript-tools.nvim",
+        event = "VeryLazy",
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         opts = {
             filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
@@ -96,7 +112,7 @@ return {
                 jsx_close_tag = {
                     enable = false,
                     filetypes = { "javascriptreact", "typescriptreact" },
-                }
+                },
             },
         },
     },
@@ -107,8 +123,8 @@ return {
         event = "VeryLazy",
         ft = { "sql", "mysql", "plsql" },
         keys = {
-            vim.keymap.set("v", "<leader>rs", ":DB<CR>", { desc = "DB: run selection" })
-        }
+            vim.keymap.set("v", "<leader>rs", ":DB<CR>", { desc = "DB: run selection" }),
+        },
     },
 
     {
@@ -118,7 +134,7 @@ return {
         cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection", "DBUIFindBuffer" },
         init = function()
             -- Where DBUI stores UI state (Windows path is fine)
-            vim.g.db_ui_save_location = vim.fn.stdpath("data") .. "\\db_ui"
+            vim.g.db_ui_save_location = vim.fn.stdpath("data") .. "/db_ui"
             -- Optional: auto-execute queries in a new split
             vim.g.db_ui_execute_on_save = 0
         end,
@@ -134,5 +150,4 @@ return {
             vim.g.dadbod_completion_mark = "DB"
         end,
     },
-
 }
