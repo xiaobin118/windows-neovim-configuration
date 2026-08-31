@@ -106,7 +106,9 @@ $optional = @(
     @{ name = "clang-format"; check = "clang-format"; cmd = "scoop install llvm" },
     @{ name = "autopep8"; cmd = "pip install autopep8" },
     @{ name = "beautysh"; cmd = "pip install beautysh" },
-    @{ name = "im-select"; check = "im-select"; cmd = "scoop install im-select" }
+    @{ name = "im-select"; check = "im-select"; cmd = "scoop install im-select" },
+    @{ name = "google-java-format"; check = "google-java-format"; cmd = "scoop install google-java-format" },
+    @{ name = "dotnet-sdk (csc)"; check = "csc"; cmd = "winget install Microsoft.DotNet.SDK.8 | scoop install dotnet-sdk" }
 )
 foreach ($opt in $optional) {
     $checkName = if ($opt.ContainsKey('check')) { $opt.check } else { $opt.name.Split('-')[0] }
