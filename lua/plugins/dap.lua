@@ -20,14 +20,28 @@ return {
         config = function()
             local dap = require("dap")
             local data = vim.fn.stdpath("data")
-            local mason_pkg = data .. "\\mason\\packages\\"
-            local mason_bin = data .. "\\mason\\bin\\"
+            local mason_pkg = data .. "/mason/packages/"
+            local mason_bin = data .. "/mason/bin/"
+
+            -- 返回 mason 安装的可执行文件路径，找不到返回 nil
+            local function mason_exe(name)
+                local candidates = {
+                    mason_bin .. name .. ".cmd",
+                    mason_pkg .. name .. "/" .. name .. ".exe",
+                }
+                for _, p in ipairs(candidates) do
+                    if vim.fn.filereadable(p) == 1 then
+                        return p
+                    end
+                end
+                return nil
+            end
 
             ------------------------------------------------------------------
             -- JS Debug Adapter (Deno)
             ------------------------------------------------------------------
             local js_debug_server =
-                mason_pkg .. "js-debug-adapter\\js-debug\\src\\dapDebugServer.js"
+            mason_pkg .. "js-debug-adapter/js-debug/src/dapDebugServer.js"
 
             dap.adapters["pwa-node"] = {
                 type = "server",
@@ -75,35 +89,63 @@ return {
             ------------------------------------------------------------------
             -- ✅ C / C++ (codelldb)
             ------------------------------------------------------------------
-            local codelldb_path = mason_bin .. "codelldb.cmd"
+            local codelldb_path = mason_exe("codelldb")
+            if codelldb_path then
+                dap.adapters.codelldb = {
+                    type = "server",
+                    port = "${port}",
+                    executable = {
+                        command = codelldb_path,
+                        args = { "--port", "${port}" },
+                    },
+                }
 
-            dap.adapters.codelldb = {
-                type = "server",
-                port = "${port}",
-                executable = {
-                    command = codelldb_path,
-                    args = { "--port", "${port}" },
-                },
-            }
+                dap.configurations.cpp = {
+                    {
+                        name = "Launch (codelldb)",
+                        type = "codelldb",
+                        request = "launch",
+                        program = function()
+                            return vim.fn.input(
+                                "Path to executable: ",
+                                vim.fn.getcwd() .. "\\",
+                                "file"
+                            )
+                        end,
+                        cwd = "${workspaceFolder}",
+                        stopOnEntry = false,
+                    },
+                }
 
-            dap.configurations.cpp = {
-                {
-                    name = "Launch (codelldb)",
-                    type = "codelldb",
-                    request = "launch",
-                    program = function()
-                        return vim.fn.input(
-                            "Path to executable: ",
-                            vim.fn.getcwd() .. "\\",
-                            "file"
-                        )
-                    end,
-                    cwd = "${workspaceFolder}",
-                    stopOnEntry = false,
-                },
-            }
+                dap.configurations.c = dap.configurations.cpp
+            end
 
-            dap.configurations.c = dap.configurations.cpp
+            -- C# (sharpdbg)
+            local sharpdbg_path = mason_exe("sharpdbg")
+            if sharpdbg_path then
+                dap.adapters.sharpdbg = {
+                    type = "executable",
+                    command = sharpdbg_path,
+                    args = { "--interpreter=vscode" },
+                }
+
+                dap.configurations.cs = {
+                    {
+                        name = "Launch (SharpDbg)",
+                        type = "sharpdbg",
+                        request = "launch",
+                        program = function()
+                            return vim.fn.input(
+                                "Path to DLL/EXE: ",
+                                vim.fn.getcwd() .. "\\bin\\Debug\\",
+                                "file"
+                            )
+                        end,
+                        cwd = "${workspaceFolder}",
+                        stopAtEntry = false,
+                    },
+                }
+            end
 
             ------------------------------------------------------------------
             -- Keymaps
