@@ -31,6 +31,9 @@ return {
                     -- C/C++
                     c = { "clang-format" },
                     cpp = { "clang-format" },
+
+                    -- Java
+                    java = { "google-java-format" },
                 },
 
                 -- Configure formatters for 4-space indentation
@@ -77,7 +80,14 @@ return {
                         prepend_args = {
                             "--style", "{BasedOnStyle: Google, IndentWidth: 4}"
                         },
-                    }
+                    },
+
+                    -- Configure google-java-format for 4-space indentation
+                    ["google-java-format"] = {
+                        prepend_args = {
+                            "--aosp"
+                        },
+                    },
 
                 },
             })
