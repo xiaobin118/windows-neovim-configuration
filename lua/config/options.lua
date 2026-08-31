@@ -11,6 +11,7 @@ vim.g.loaded_perl_provider = 0
 -- UI & Layout
 vim.wo.number = true
 vim.wo.relativenumber = true
+vim.o.winborder = 'rounded'
 vim.o.cursorline = true
 vim.o.autoindent = true
 vim.o.expandtab = true
@@ -41,14 +42,15 @@ vim.opt.fillchars = { vert = "│", stl = " ", stlnc = " " }
 vim.opt.colorcolumn = ""
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.cursorline = true
 
 -- Highlighting: find a comfortable color scheme for LineNr and CursorLineNr-- skyblue and bluewhite:
 vim.cmd [[highlight LineNr guifg=#87CEEB ]]
 vim.cmd [[ highlight FloatBorder guifg=cyan guibg=NONE ]] -- Customize border color
 
 -- vim.opt.winblend = 30 -- Floating window transparency level
-vim.opt.winblend = 10
-vim.opt.pumblend = 10
+-- vim.opt.winblend = 10
+-- vim.opt.pumblend = 10
 
 -- Language & Encoding
 vim.o.langmenu = "zh_CN.UTF-8"
@@ -66,6 +68,9 @@ local undo_dir = vim.fn.stdpath("state") .. "/undo"
 vim.fn.mkdir(undo_dir, "p")
 vim.opt.undodir = undo_dir
 
+-- enable line and colum show
+
+
 -- System
 vim.o.autoread = true
 vim.o.autowrite = true
@@ -80,7 +85,7 @@ if vim.g.neovide then
     -- Use a Nerd Font. Fallback included.
     vim.o.guifont = "JetBrainsMono Nerd Font:h14"
     vim.g.neovide_text_gamma = 0.8
-    vim.g.neovide_text_contrast = 0.1
+    vim.g.neovide_text_contrast = 1.2
 
     -- 2. Window Appearance (Blur & Transparency)
     vim.g.neovide_opacity = 0.88
@@ -110,7 +115,7 @@ if vim.g.neovide then
     -- 4. Behavior & Performance
     vim.g.neovide_refresh_rate = 120 -- Set to your monitor's refresh rate
     vim.g.neovide_refresh_rate_idle = 5
-    vim.g.neovide_no_idle = true
+    vim.g.neovide_no_idle = false
     vim.g.neovide_confirm_quit = true
     vim.g.neovide_input_ime = true -- Enable IME support for Chinese input
 
@@ -156,4 +161,7 @@ if vim.g.neovide then
     vim.keymap.set("v", "<C-v>", '"+P')    -- Paste visual mode
     vim.keymap.set("c", "<C-v>", "<C-R>+") -- Paste command mode
     vim.keymap.set("i", "<C-v>", '<C-r>+') -- Paste insert mode
+
+    -- round
+    vim.g.neovide_corner_preference = "round"
 end

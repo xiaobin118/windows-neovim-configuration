@@ -1,15 +1,21 @@
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        os.execute("im-select 1033") -- Use appropriate command/ID for your OS
+    end,
+})
 -- =========================
 -- Formatting Function & Keymap
 -- =========================
 local function format_src()
     vim.cmd("write")
     local ft = vim.bo.filetype
-    local file = vim.fn.expand("%")
+    local file = vim.fn.shellescape(vim.fn.expand("%:p"))
 
     if ft == "c" then
-        vim.cmd("!astyle --style=gnu --suffix=none " .. file)
+        vim.cmd("!astyle --style=gnu --indent=spaces=8 --suffix=none " .. file)
+
     elseif ft == "cpp" or ft == "hpp" then
-        vim.cmd("!clang-format -i " .. file)
+        vim.cmd("!clang-format -i --style=\"{IndentWidth: 4}\" " .. file)
     elseif ft == "perl" then
         vim.cmd("!astyle --style=gnu --suffix=none " .. file)
     elseif ft == "py" or ft == "python" then
@@ -167,6 +173,8 @@ local mappings = {
     ps1 = 'powershell.exe -ExecutionPolicy Bypass -Command "& \'%\' ; Read-Host -Prompt \\"Press Enter to continue\\""',
     rust = 'cmd.exe /C "cd /d "%:p:h" && rustc "%:t" -o "%:t:r.exe" && "%:t:r.exe" & pause"',
     typescript = 'cmd.exe /C "deno run "%" & pause"',
+    -- c sharp run
+    cs = 'cmd.exe /C "cd /d "%:p:h" && csc "%" && "%:t:r.exe" & pause"',
 }
 
 -- Apply the mappings as a buffer-local <F5> keybind for each filetype

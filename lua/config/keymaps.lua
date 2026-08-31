@@ -1,6 +1,6 @@
 -- Diagnostic navigation
-vim.api.nvim_set_keymap("n", "<leader>gj", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>gk", "<cmd>lua vim.diagnostic.goto_next()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>j", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>k", "<cmd>lua vim.diagnostic.goto_next()<CR>", { noremap = true, silent = true })
 
 -- Basic Mappings
 vim.keymap.set("i", "jj", "<Esc>", { noremap = true, silent = true })
@@ -33,3 +33,23 @@ vim.keymap.set("n", "<C-F2>", ":vert diffsplit<CR>", { noremap = true, silent = 
 -- Command & Terminal Paste
 vim.api.nvim_set_keymap("c", "<C-v>", "<C-r>+", { noremap = true })
 vim.api.nvim_set_keymap("t", "<C-v>", '<C-\\><C-n>"+pa', { noremap = true })
+-- setlocal spell
+-- set spelllang=nl,en_gb
+-- inoremap <C-l> <c-g>u<Esc>[s1z=`]a<cog>u
+
+-- Only enable spell + <C-l> in markdown and tex buffers
+-- vim.api.nvim_create_autocmd("FileType", {
+  -- pattern = { "markdown", "tex", "plaintex" },
+  -- callback = function(args)
+    -- -- buffer-local options
+    -- vim.opt_local.spell = true
+    -- vim.opt_local.spelllang = { "en_gb", "zh" }
+
+    -- -- buffer-local keymap
+    -- vim.keymap.set("i", "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u", {
+      -- buffer = args.buf,
+      -- noremap = true,
+      -- silent = true,
+    -- })
+  -- end,
+-- })
