@@ -4,15 +4,13 @@ return {
         priority = 1000,
         lazy = false,
         opts = {
-            -- Image configuration for Neovide
+            -- Snacks.image requires the Kitty graphics protocol. Keep it off in Neovide/Windows Terminal.
             image = {
-                enabled = false,   -- 1. Enable it (was false)
+                enabled = false,
                 doc = {
                     inline = true, -- Show images in hover docs
                     float = true,  -- Show images in floating windows
                 },
-                -- 2. REMOVED the complex 'terminal' function.
-                -- Snacks auto-detects Neovide when that function is missing.
             },
 
             -- Rest of your settings...

@@ -51,7 +51,6 @@ return {
                         horizontal = { height = 0.6, preview_cutoff = 1, prompt_position = "top", width = 100, preview_width = 0.6 },
                         vertical = { height = 0.6, preview_cutoff = 1, prompt_position = "top", width = 100, preview_width = 0.6 },
                     },
-                    winblend = 10,
                     border = {},
                     borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
                     file_ignore_patterns = { "node_modules", ".git/", ".dll", ".exe", "dist/", "build/", "target/" },
@@ -173,7 +172,7 @@ return {
     -- Utilities
     { "vim-scripts/CaptureClipboard",   event = "VeryLazy" },
     { "vim-scripts/Vim-Script-Updater", cmd = "VimScriptUpdate" },
-    { "christoomey/vim-tmux-navigator", lazy = true },
+    -- { "christoomey/vim-tmux-navigator", lazy = true },
     { "folke/which-key.nvim",           event = "VeryLazy",     config = function() require("which-key").setup({}) end },
     { "folke/todo-comments.nvim",       event = "BufReadPre" },
     { "folke/twilight.nvim",            event = "VeryLazy",     opts = {} },
@@ -194,7 +193,7 @@ return {
 
     -- Impatient (Accelerator)
     { "lewis6991/impatient.nvim" },
-    { "dstein64/vim-startuptime", lazy = true },
+    -- { "dstein64/vim-startuptime", lazy = true },
 
     -- -- Sidekick
     -- {
@@ -311,6 +310,15 @@ return {
         end,
     },
 
+-- Lua
+{
+  "folke/zen-mode.nvim",
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+}
     -- {
     -- 'adelarsq/image_preview.nvim',
     -- event = 'VeryLazy',

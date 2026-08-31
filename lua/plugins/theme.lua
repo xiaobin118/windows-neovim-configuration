@@ -57,6 +57,7 @@ return {
             "kanagawa",      -- 添加依赖确保主题先加载
             "cyberdream",
             "everforest",
+            "monet",
         },
         config = function()
             require("themery").setup({
@@ -65,6 +66,11 @@ return {
 
                 -- 预设主题列表
                 themes = {
+                    -- no theme(keep original vim style)
+                    {
+                        name = "No Theme",
+                        colorscheme = "default", -- Neovim 内置默认主题，恢复原始 vim 外观
+                    },
                     -- Catppuccin 系列（需要设置 flavour）
                     {
                         name = "Catppuccin Latte",
@@ -120,20 +126,6 @@ return {
                     },
 
                     -- Everforest 系列（需要设置变体）
-                    {
-                        name = "Everforest Hard",
-                        colorscheme = "everforest",
-                        before = [[
-                        vim.g.everforest_background = "hard"
-                    ]],
-                    },
-                    {
-                        name = "Everforest Medium",
-                        colorscheme = "everforest",
-                        before = [[
-                        vim.g.everforest_background = "medium"
-                    ]],
-                    },
                     {
                         name = "Everforest Soft",
                         colorscheme = "everforest",
