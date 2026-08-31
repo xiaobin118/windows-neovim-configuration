@@ -1,9 +1,12 @@
 -- Load
 -- Auto cd to current buffer's directory when switching buffers
 if vim.fn.has("win32") == 1 then
-    vim.g.plenary_curl_bin_path = "C:\\Windows\\System32\\curl.exe"
-    vim.g.copilot_curl = "C:\\Windows\\System32\\curl.exe"
-    vim.env.CURL = "C:\\Windows\\System32\\curl.exe"
+    local curl = require("config.util").find_executable("curl", { "C:/Windows/System32" })
+    if curl then
+        vim.g.plenary_curl_bin_path = curl
+        vim.g.copilot_curl = curl
+        vim.env.CURL = curl
+    end
 end
 
 vim.api.nvim_create_autocmd("BufEnter", {
